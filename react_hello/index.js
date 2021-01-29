@@ -306,56 +306,246 @@
 
 
 
+// 事件处理
 
-const Router = ReactRouter.Router
-const Route = ReactRouter.Route
-const Link = ReactRouter.Link
+// function App(props) {
+//   function handleBtnClick(e) {
+//     console.log("btn have been clicked")
+//     e.preventDefault()
+//   }
 
-function About() {
-  return(
-    <h1>About</h1>
-  )
-}
-function Inbox() {
-  return (
-    <h1>Inbox</h1>
-  )
-}
-function Home() {
-  return (
-    <h1>Home</h1>
-  )
-}
-// 然后我们从应用中删除一堆代码和
-// 增加一些 <Link> 元素...
-class App extends React.Component{
+
+//   return (
+//     <a href="baidu.com" onClick={handleBtnClick}>百度</a>
+//   )
+// }
+
+// ReactDOM.render(<App/>,document.getElementById("complex"))
+
+//监听事件绑定
+
+// class Toggle extends React.Component{
+
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       isOn: false
+//     }
+
+//     this.handleBtnClick =this.handleBtnClick.bind(this)
+//   }
+
+//   // 不用手动绑定this指针的方式使用箭头函数的方式命名函数
+//   handleBtnClick = () => {
+//     this.setState(state => ({
+//       isOn: !state.isOn
+//     }))
+//   }
+//   // 或者使用的时候使用箭头函数调用
+//   // onClick={ e => this.handleBtnClick() }
+
+//   // 注意箭头函数的使用方法
+//   // handleBtnClick() {
+//   //   this.setState(state => ({
+//   //     isOn: !state.isOn
+//   //   }))
+//   // }
+
+//   render() {
+//     return(
+//       <button onClick={this.handleBtnClick}>{this.state.isOn? "ON" : "OFF"}</button>
+//     )
+//   }
+// }
+
+// ReactDOM.render(<Toggle/>, document.getElementById("complex"))
+
+
+// render函数中返回null阻止组件渲染
+
+// function Warning(props) {
+
+
+//   if(!props.isShow) {
+//     return null;
+//   }else {
+//     return <h1>Waring have been showed!</h1>
+//   }
+// }
+
+// class Page extends React.Component{
+
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       isShow: true
+//     }
+//     // this.handleClick =this.handleClick.bind(this)
+//   }
+
+//   // 注意箭头函数的写法 
+//   // handleClick() {
+//   //   this.setState(
+//   //     state => ({
+//   //       isShow: !state.isShow
+//   //     })
+//   //   )
+//   // }
+
+//   handleClick = () => {
+//     this.setState(state => ({
+//       isShow: !state.isShow
+//     }))
+//   }
+
+
+//   render() {
+//     return(
+//       <div>
+//         <Warning isShow={this.state.isShow} />
+//         <button onClick={this.handleClick}>{this.state.isShow? "hide": "show"}</button>
+//       </div>
+//     )
+//   }
+// }
+
+// ReactDOM.render(<Page/>, document.getElementById("complex"))
+
+
+
+// 基础列表的渲染
+
+// const nums = [1, 2, 3, 4, 5]
+// const listItems = nums.map(
+//   num => <li>{num}</li> 
+// )
+
+// ReactDOM.render(listItems,document.getElementById("complex"))
+// function List(props) {
+//   const nums = [1, 2, 3, 4, 5]
+//   const listItems = nums.map(
+//     num => <li>{num}</li>
+//   )
+
+//   return listItems
+// }
+
+
+// ReactDOM.render(<List/>,document.getElementById("complex"))
+
+
+// 基础列表的渲染,绑定key，这样React可以知道列表中的哪些元素是变化的
+// function List(props) {
+//   const nums = [1, 2, 3, 4, 5]
+//   const listItems = nums.map(
+//     (num,index) => <li key={index.toString()}>index:{index},value:{num * 2}</li>
+//   )
+
+//   return listItems
+// }
+
+
+// ReactDOM.render(<List/>,document.getElementById("complex"))
+
+
+
+// 双向数据模型绑定
+
+// class App extends React.Component {
+//   constructor(props) {
+//     super(props)
+//     this.state = {
+//       text: '请撰写一篇关于你喜欢的 DOM 元素的文章.'
+//     }
+//   }
+
+
+//   handleChange= (e) => {
+//     this.setState( state => ({
+//       text: e.target.value
+//     }))
+//   }
+//   render() {
+//     return(
+//       <div>
+//         <h1>{this.state.text}</h1>
+//         <textarea value={this.state.text} onChange={this.handleChange}></textarea>
+//       </div>
+//     )
+//   }
+
+
+// }
+
+// ReactDOM.render(<App/>,document.getElementById("complex"))
+
+
+
+// let Fragment = React.Fragment
+
+// function ListItem({ item }) {
+//   return (
+//     <Fragment>
+//       <dt>{item.term}</dt>
+//       <dd>{item.description}</dd>
+//     </Fragment>
+//   )
+// }
+
+// function Glossary(props) {
+//   return ([
+//     <dl>
+//       {
+//         props.items.map((item,index) => {
+//           return <ListItem item={item} key={index} />
+//         })
+//       }
+//     </dl>
+//   ])
+// }
+// let items = [
+//   {
+//     id: 1,
+//     term: "hello",
+//     description: "hello Tom!"
+//   }
+// ]
+
+// ReactDOM.render(<Glossary items={items}/>,document.querySelector("#complex"))
+
+
+// react中的错误捕获
+
+let component = React.Component;
+
+
+class Error extends component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false,
+    }
+  };
+  static setError() {
+    return {
+      hasError: true
+    }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.log("错误信息为" + errorInfo)
+  }
+
+
+
   render() {
-    return (
-      <div>
-        <h1>App</h1>
-        {/* 把 <a> 变成 <Link> */}
-        <ul>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/inbox">Inbox</Link></li>
-        </ul>
-
-        {/*
-          接着用 `this.props.children` 替换 `<Child>`
-          router 会帮我们找到这个 children
-        */}
-        {this.props.children}
-      </div>
-    )
+    if (this.state.hasError) {
+      return (
+        <h1>this component has an error</h1>
+      )
+    }
+    return this.props.children
   }
 }
 
-// 最后，我们用一些 <Route> 来渲染 <Router>。
-// 这些就是路由提供的我们想要的东西。
-ReactDOM.render((
-  <Router>
-    <Route path="/" component={App}>
-      <Route path="about" component={About} />
-      <Route path="inbox" component={Inbox} />
-    </Route>
-  </Router>
-), document.querySelector("#complex"))
+ReactDOM.render(<Error/>,document.getElementById("complex"))
