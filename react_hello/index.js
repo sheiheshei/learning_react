@@ -516,36 +516,36 @@
 
 // react中的错误捕获
 
-let component = React.Component;
+// let component = React.Component;
 
 
-class Error extends component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasError: false,
-    }
-  };
-  static setError() {
-    return {
-      hasError: true
-    }
-  }
+// class Error extends component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       hasError: false,
+//     }
+//   };
+//   static setError() {
+//     return {
+//       hasError: true
+//     }
+//   }
 
-  componentDidCatch(error, errorInfo) {
-    console.log("错误信息为" + errorInfo)
-  }
+//   componentDidCatch(error, errorInfo) {
+//     console.log("错误信息为" + errorInfo)
+//   }
 
 
 
-  render() {
-    if (this.state.hasError) {
-      return (
-        <h1>this component has an error</h1>
-      )
-    }
-    return this.props.children
-  }
-}
+//   render() {
+//     if (this.state.hasError) {
+//       return (
+//         <h1>this component has an error</h1>
+//       )
+//     }
+//     return this.props.children
+//   }
+// }
 
-ReactDOM.render(<Error/>,document.getElementById("complex"))
+// ReactDOM.render(<Error/>,document.getElementById("complex"))
