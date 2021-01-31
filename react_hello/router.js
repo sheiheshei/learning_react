@@ -3,6 +3,8 @@ let Switch = ReactRouterDOM.Switch
 let Link = ReactRouterDOM.Link
 let Router = ReactRouterDOM.BrowserRouter
 let useParams = ReactRouterDOM.useParams
+let useRouteMatch = ReactRouterDOM.useRouteMatch
+
 
 /**
  * <Link><Link/>会将元素渲染成<a/>标签，to属性表示其去往那个URL，
@@ -138,88 +140,200 @@ let useParams = ReactRouterDOM.useParams
  * 坑：路由中Link中的to属性值和Route中的path属性一定要相等，包括最前面的"/"
  * 1）、嵌套使用的路由需要使用父组件的url，这里使用useRouteMatch()获取URL或者path变量，最后在子路由中所使用
  */
-let useRouteMatch = ReactRouterDOM.useRouteMatch
 
 
 
-function Home() {
+// function Home() {
+//   return (
+//     <h1>Home</h1>
+//   )
+// }
+
+// function Topics() {
+
+//   let { path, url } = useRouteMatch()
+
+
+
+//   return (
+//     <Router>
+//       <h2>Topics</h2>
+//       <div>
+//         <ul>
+//           <li>
+//             <Link to={`${url}/rendering`}>Rendering with React</Link>
+//           </li>
+//           <li>
+//             <Link to={`${url}/components`}>Components</Link>
+//           </li>
+//           <li>
+//             <Link to={`${url}/props-v-state`}>Props v. State</Link>
+//           </li>
+//         </ul>
+//         <Switch>
+//           <Route exact path={path}>
+//             <h3>Please select a topic.</h3>
+//           </Route>
+//           <Route path={`${path}/:topicId`}>
+//             <Topic />
+//           </Route>
+//         </Switch>
+
+//       </div>
+//     </Router>
+//   )
+// }
+
+// function Topic() {
+//   let { topicId } = useParams()
+//   return (
+//     <h3>topicID:{topicId}</h3>
+//   )
+// }
+
+
+// function NestRoute() {
+
+//   return (
+//     <Router>
+//       <div>
+//         <ul>
+//           <li>
+//             <Link to="/">Home</Link>
+//           </li>
+//           <li>
+//             <Link to="/topics">Topics</Link>
+//           </li>
+//         </ul>
+
+//         <hr></hr>
+//         <Switch>
+//           <Route exact path="/">
+//             <Home></Home>
+//           </Route>
+//           <Route path="/topics">
+//             <Topics />
+//           </Route>
+//         </Switch>
+//       </div>
+//     </Router>
+//   )
+// }
+
+// ReactDOM.render(<NestRoute />, document.getElementById("complex"))
+
+
+// 侧边栏测试,类似vue中的处理方式，将所有的路由提取成route数组，最后通过函数进行遍历实现route
+
+
+
+
+// const routes = [{
+//   path: "/",
+//   exact: true,
+//   sidebar: Home,
+// }, {
+//   path: "/bubblegum",
+//   sidebar: () => <div>bubblegum!!</div>
+// }, {
+//   path: "/shoelaces",
+//   sidebar: () => <div>shoelaces!!!</div>
+// }]
+
+// function Home() {
+//   return (
+//     <div>home!</div>
+//   )
+// }
+
+// function SideBar() {
+//   return (
+//     <Router>
+//       <div>
+//         <ul>
+//           <li><Link to="/">Home</Link></li>
+//           <li><Link to="/bubblegum">Bubblegum</Link></li>
+//           <li><Link to="/shoelaces">Shoelaces</Link></li>
+//         </ul>
+//       </div>
+//       <Switch>
+//         {
+//           routes.map((route, index) => (
+//             <Route
+//               key={index}
+//               path={route.path}
+//               exact={route.exact}
+//               children={<route.sidebar></route.sidebar>}
+//             ></Route>
+//           ))
+//         }
+//       </Switch>
+//     </Router>
+//   )
+
+// }
+
+// ReactDOM.render(<SideBar />, document.getElementById("complex"))
+
+
+// 路由配置提取
+
+function Tacos(props) {
   return (
-    <h1>Home</h1>
+    <h1>{props.location.pathname}</h1>
   )
 }
 
-function Topics() {
-
-  let { path, url } = useRouteMatch()
-
-
-
+function Sandwiches() {
   return (
-    // <h1>Topics</h1>
+    <h1>Sandwiches!!!</h1>
+  )
+}
+
+
+const routes = [
+  {
+    path: "/tacos",
+    component: Tacos,
+  },
+  {
+    path: "/sandwitches",
+    component: Sandwiches,
+  }
+]
+
+// 将单个route对象转换成一个组件
+function SibeRoute(route) {
+  return (
+    <Route 
+    path = {route.path}
+    render = {
+      props => (
+        <route.component {...props} routes = {route.routes} />
+      )
+    }
+    />
+  )
+}
+
+function RouteConfig() {
+  return (
     <Router>
-      <h2>Topics</h2>
       <div>
         <ul>
-          <li>
-            <Link to={`${url}/rendering`}>Rendering with React</Link>
-          </li>
-          <li>
-            <Link to={`${url}/components`}>Components</Link>
-          </li>
-          <li>
-            <Link to={`${url}/props-v-state`}>Props v. State</Link>
-          </li>
+          <li><Link to="/tacos">tacos</Link></li>
+          <li><Link to="/sandwitches">sandwitches</Link></li>
         </ul>
-        <Switch>
-          <Route exact path={path}>
-            <h3>Please select a topic.</h3>
-          </Route>
-          <Route path={`${path}/:topicId`}>
-            <Topic />
-          </Route>
-        </Switch>
-
       </div>
+      <Switch>
+        {routes.map((route,index) => (
+          <SibeRoute key = {index} {...route}/>
+        ))}
+      </Switch>
     </Router>
   )
 }
 
-function Topic() {
-  let { topicId } = useParams()
-  return (
-    <h3>topicID:{topicId}</h3>
-  )
-}
 
 
-function NestRoute() {
-
-  return (
-    <Router>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/topics">Topics</Link>
-          </li>
-        </ul>
-
-        <hr></hr>
-        <Switch>
-          <Route exact path="/">
-            <Home></Home>
-          </Route>
-          <Route path="/topics">
-            <Topics />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
-  )
-}
-
-ReactDOM.render(<NestRoute />, document.getElementById("complex"))
-
-
+ReactDOM.render(<RouteConfig routes = {routes} />, document.getElementById("complex"))
